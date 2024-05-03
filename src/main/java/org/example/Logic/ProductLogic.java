@@ -19,12 +19,21 @@ public class ProductLogic {
         Product product = productDAO.findByName(name);
         productDAO.delete(product.getId());
     }
+
+    public static void editProduct(String name, ProductDTO productDTO){
+        ProductDAO productDAO = new ProductDAO();
+        Product product = productDAO.findByName(name);
+        product.setName(productDTO.getName());
+        product.setPrice(productDTO.getPrice());
+        product.setStock(productDTO.getStock());
+        productDAO.update(product, product.getId());
+    }
     public static List<ProductDTO> getAllProducts(){
         ProductDAO productDAO = new ProductDAO();
         List<Product> products = productDAO.findAll();
         List<ProductDTO> productDTOS = new ArrayList<>();
         for(Product product : products){
-            ProductDTO productDTO = new ProductDTO(product.getName(),product.getStock(), product.getPrice());
+            ProductDTO productDTO = new ProductDTO(product.getName(), product.getPrice(),product.getStock());
             productDTOS.add(productDTO);
         }
         return productDTOS;

@@ -51,7 +51,15 @@ public class Controller {
         ClientLogic.deleteClient(name);
     }
 
+    public static void editClient(String name, ClientDTO clientDTO) {
+        ClientLogic.editClient(name, clientDTO);
+    }
+
     public static void deleteProduct(String name) {
         ProductLogic.deleteProduct(name);
+    }
+
+    public static void editProduct(String name, ProductDTO productDTO) {
+        ProductLogic.editProduct(name, productDTO);
     }
 }

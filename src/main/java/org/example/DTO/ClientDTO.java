@@ -2,8 +2,9 @@ package org.example.DTO;
 
 public class ClientDTO {
     private final String name;
-    private final String address;
     private final String email;
+    private final String address;
+
     public ClientDTO(String name, String address, String email){
         super();
         this.name = name;

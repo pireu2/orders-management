@@ -157,6 +157,8 @@ public class AbstractDAO <T>{
             Field[] fields = object.getClass().getDeclaredFields();
             int index = 1;
             for (Field field : fields) {
+                if(field.getName().equals("id"))
+                    continue;
                 field.setAccessible(true);
                 Object value = field.get(object);
                 if (value instanceof Integer) {

@@ -5,7 +5,7 @@ public class ProductDTO {
     private final int stock;
     private final double price;
 
-    public ProductDTO(String name, int stock, double price){
+    public ProductDTO(String name, double price, int stock){
         super();
         this.name = name;
         this.stock = stock;

@@ -7,6 +7,7 @@ import org.example.DTO.ProductDTO;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.html.StyleSheet;
 import java.awt.*;
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -32,6 +33,143 @@ public class View  extends JFrame {
 
     public void setMainPanel(JPanel panel){
         this.setContentPane(panel);
+    }
+
+
+    private JPanel editProductPane(){
+        JPanel pane = new JPanel();
+        pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
+        pane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JPanel productPanel = new JPanel(new GridLayout(3, 2, 10, 10));
+        productPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JLabel nameLabel = new JLabel("Name");
+        JComboBox<String> nameField = new JComboBox<>();
+        Controller.getAllProductsName().forEach(nameField::addItem);
+
+        JLabel stockLabel = new JLabel("Stock");
+        JTextField stockField = new JTextField();
+
+        JLabel priceLabel = new JLabel("Email");
+        JTextField priceField = new JTextField();
+
+        productPanel.add(nameLabel);
+        productPanel.add(nameField);
+        productPanel.add(stockLabel);
+        productPanel.add(stockField);
+        productPanel.add(priceLabel);
+        productPanel.add(priceField);
+
+        JLabel editProductLabel = new JLabel("Edit product");
+        editProductLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        pane.add(editProductLabel);
+        pane.add(productPanel);
+
+        nameField.addActionListener(e -> {
+            if(nameField.getSelectedItem() == null){
+                return;
+            }
+            ProductDTO productDTO = Controller.getAllProducts().stream()
+                    .filter(product -> product.getName().equals(Objects.requireNonNull(nameField.getSelectedItem()).toString()))
+                    .findFirst()
+                    .orElse(null);
+            stockField.setText("" + productDTO.getStock());
+            priceField.setText("" + productDTO.getPrice());
+        });
+        if (nameField.getItemCount() > 0) {
+            nameField.setSelectedIndex(0);
+        }
+
+        Box buttonBox = Box.createHorizontalBox();
+        JButton editproductButton = new JButton("Edit Product");
+        editproductButton.addActionListener(e -> {
+            if(nameField.getSelectedItem() == null){
+                JOptionPane.showMessageDialog(this, "Please select a Product");
+                return;
+            }
+            if(stockField.getText().trim().isEmpty() || priceField.getText().trim().isEmpty()){
+                JOptionPane.showMessageDialog(this, "Please fill all fields");
+                return;
+            }
+            ProductDTO productDTO = new ProductDTO(Objects.requireNonNull(nameField.getSelectedItem()).toString(), Double.parseDouble(priceField.getText().trim()), Integer.parseInt(stockField.getText().trim()));
+            Controller.editProduct(Objects.requireNonNull(nameField.getSelectedItem()).toString(), productDTO);
+            nameField.setSelectedIndex(nameField.getSelectedIndex());
+        });
+        buttonBox.add(Box.createHorizontalGlue());
+        buttonBox.add(editproductButton);
+        buttonBox.add(Box.createHorizontalGlue());
+
+        pane.add(buttonBox);
+
+        return pane;
+    }
+    private JPanel editClientPane(){
+        JPanel pane = new JPanel();
+        pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
+        pane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JPanel clientPanel = new JPanel(new GridLayout(3, 2, 10, 10));
+        clientPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JLabel nameLabel = new JLabel("Name");
+        JComboBox<String> nameField = new JComboBox<>();
+        Controller.getAllClientsNames().forEach(nameField::addItem);
+
+        JLabel addressLabel = new JLabel("Address");
+        JTextField addressField = new JTextField();
+
+        JLabel emailLabel = new JLabel("Email");
+        JTextField emailField = new JTextField();
+
+        clientPanel.add(nameLabel);
+        clientPanel.add(nameField);
+        clientPanel.add(addressLabel);
+        clientPanel.add(addressField);
+        clientPanel.add(emailLabel);
+        clientPanel.add(emailField);
+
+        JLabel editClientLabel = new JLabel("Edit Client");
+        editClientLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        pane.add(editClientLabel);
+        pane.add(clientPanel);
+
+        nameField.addActionListener(e -> {
+            if(nameField.getSelectedItem() == null){
+                return;
+            }
+            ClientDTO clientDTO = Controller.getAllClients().stream()
+                    .filter(client -> client.getName().equals(Objects.requireNonNull(nameField.getSelectedItem()).toString()))
+                    .findFirst()
+                    .orElse(null);
+            addressField.setText(clientDTO.getAddress());
+            emailField.setText(clientDTO.getEmail());
+        });
+
+        if (nameField.getItemCount() > 0) {
+            nameField.setSelectedIndex(0);
+        }
+
+        Box buttonBox = Box.createHorizontalBox();
+        JButton editClientButton = new JButton("Edit Client");
+        editClientButton.addActionListener(e -> {
+            if(nameField.getSelectedItem() == null){
+                JOptionPane.showMessageDialog(this, "Please select a client");
+                return;
+            }
+            if(addressField.getText().trim().isEmpty() || emailField.getText().trim().isEmpty()){
+                JOptionPane.showMessageDialog(this, "Please fill all fields");
+                return;
+            }
+            ClientDTO clientDTO = new ClientDTO(Objects.requireNonNull(nameField.getSelectedItem()).toString(), addressField.getText().trim(), emailField.getText().trim());
+            Controller.editClient(Objects.requireNonNull(nameField.getSelectedItem()).toString(), clientDTO);
+            nameField.setSelectedIndex(nameField.getSelectedIndex());
+        });
+        buttonBox.add(Box.createHorizontalGlue());
+        buttonBox.add(editClientButton);
+        buttonBox.add(Box.createHorizontalGlue());
+
+        pane.add(buttonBox);
+
+        return pane;
     }
 
     private JPanel deleteClientPane() {
@@ -265,7 +403,7 @@ public class View  extends JFrame {
                 JOptionPane.showMessageDialog(this, "Please fill all fields");
                 return;
             }
-            ProductDTO productDTO = new ProductDTO(nameField.getText().trim(), Integer.parseInt(quantityField.getText().trim()),  Double.parseDouble(priceField.getText().trim()));
+            ProductDTO productDTO = new ProductDTO(nameField.getText().trim(),  Double.parseDouble(priceField.getText().trim()), Integer.parseInt(quantityField.getText().trim()));
             Controller.createProduct(productDTO);
             nameField.setText("");
             priceField.setText("");
@@ -309,6 +447,12 @@ public class View  extends JFrame {
             revalidate();
             repaint();
         });
+        JMenuItem editClient = new JMenuItem("Edit Client");
+        editClient.addActionListener(e -> {
+            setMainPanel(editClientPane());
+            revalidate();
+            repaint();
+        });
         JMenuItem deleteClient = new JMenuItem("Delete Client");
         deleteClient.addActionListener(e ->{
             setMainPanel(deleteClientPane());
@@ -343,6 +487,12 @@ public class View  extends JFrame {
             revalidate();
             repaint();
         });
+        JMenuItem editProduct = new JMenuItem("Edit Product");
+        editProduct.addActionListener(e -> {
+            setMainPanel(editProductPane());
+            revalidate();
+            repaint();
+        });
         JMenuItem deleteProduct = new JMenuItem("Delete Product");
         deleteProduct.addActionListener(e -> {
             setMainPanel(deleteProductPane());
@@ -352,6 +502,7 @@ public class View  extends JFrame {
 
         clientMenu.add(addClient);
         clientMenu.add(viewClients);
+        clientMenu.add(editClient);
         clientMenu.add(deleteClient);
 
         orderMenu.add(addOrder);
@@ -359,6 +510,7 @@ public class View  extends JFrame {
 
         productMenu.add(addProduct);
         productMenu.add(viewProducts);
+        productMenu.add(editProduct);
         productMenu.add(deleteProduct);
 
         logMenu.add(viewLogs);
