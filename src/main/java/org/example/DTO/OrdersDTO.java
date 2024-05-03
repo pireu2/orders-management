@@ -1,14 +1,12 @@
 package org.example.DTO;
 
-public class OrderDTO {
-    private String clientName;
-    private String productName;
-    private int quantity;
+public class OrdersDTO {
+    private final String clientName;
+    private final String productName;
+    private final int quantity;
 
-    public OrderDTO(){
-    }
 
-    public OrderDTO(String clientName, String productName, int quantity){
+    public OrdersDTO(String clientName, String productName, int quantity){
         super();
         this.clientName = clientName;
         this.productName = productName;
@@ -19,24 +17,12 @@ public class OrderDTO {
         return clientName;
     }
 
-    public void setClientName(String clientName) {
-        this.clientName = clientName;
-    }
-
     public String getProductName() {
         return productName;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
     public int getQuantity() {
         return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
     }
 
 }

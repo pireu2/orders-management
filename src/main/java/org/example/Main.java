@@ -1,7 +1,12 @@
 package org.example;
 
+
+import org.example.Gui.View;
+
 public class Main {
+
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        View view = new View("Orders Management System");
+        view.setVisible(true);
     }
 }

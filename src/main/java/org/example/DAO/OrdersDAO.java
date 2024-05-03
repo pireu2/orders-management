@@ -1,4 +1,4 @@
-package org.example.Data;
+package org.example.DAO;
 
 import org.example.Model.Orders;
 

@@ -1,4 +1,4 @@
-package org.example.Data;
+package org.example.DAO;
 
 import org.example.Connection.ConnectionFactory;
 
@@ -31,6 +31,55 @@ public class AbstractDAO <T>{
             statement = connection.prepareStatement(createSelectAllQuery());
             resultSet = statement.executeQuery();
             return createObjects(resultSet);
+        }
+        catch(SQLException e){
+            LOGGER.severe(e.toString());
+        }
+        finally{
+            ConnectionFactory.close(resultSet);
+            ConnectionFactory.close(statement);
+            ConnectionFactory.close(connection);
+        }
+        return null;
+    }
+    public T findByName(String name){
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try{
+            connection = ConnectionFactory.getConnection();
+            statement = connection.prepareStatement(createSelectQuery("name"));
+            statement.setString(1, name);
+            resultSet = statement.executeQuery();
+            List<T> list = createObjects(resultSet);
+            if(list.isEmpty()){
+                return null;
+            }
+            return list.get(0);
+        }
+        catch(SQLException e){
+            LOGGER.severe(e.toString());
+        }
+        finally{
+            ConnectionFactory.close(resultSet);
+            ConnectionFactory.close(statement);
+            ConnectionFactory.close(connection);
+        }
+        return null;
+    }
+    public T findLast(){
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try{
+            connection = ConnectionFactory.getConnection();
+            statement = connection.prepareStatement("SELECT * FROM " + type.getSimpleName() + " ORDER BY id DESC LIMIT 1");
+            resultSet = statement.executeQuery();
+            List<T> list = createObjects(resultSet);
+            if(list.isEmpty()){
+                return null;
+            }
+            return list.get(0);
         }
         catch(SQLException e){
             LOGGER.severe(e.toString());
@@ -99,6 +148,38 @@ public class AbstractDAO <T>{
         }
     }
 
+    public void update(T object, int id){
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try{
+            connection = ConnectionFactory.getConnection();
+            statement = connection.prepareStatement(createUpdateStatement(object));
+            Field[] fields = object.getClass().getDeclaredFields();
+            int index = 1;
+            for (Field field : fields) {
+                field.setAccessible(true);
+                Object value = field.get(object);
+                if (value instanceof Integer) {
+                    statement.setInt(index, (Integer) value);
+                } else if (value instanceof String) {
+                    statement.setString(index, (String) value);
+                } else if (value instanceof Double) {
+                    statement.setDouble(index, (Double) value);
+                }
+                index++;
+            }
+            statement.setInt(index, id);
+            statement.executeUpdate();
+        }catch(SQLException | IllegalAccessException e){
+            LOGGER.severe(e.toString());
+        }
+        finally{
+            ConnectionFactory.close(statement);
+            ConnectionFactory.close(connection);
+        }
+    }
+
+
     public void delete(int id){
         Connection connection = null;
         PreparedStatement statement = null;
@@ -132,7 +213,8 @@ public class AbstractDAO <T>{
         StringBuilder fields = new StringBuilder();
         StringBuilder values = new StringBuilder();
 
-        for(Field field : object.getClass().getFields()){
+
+        for(Field field : object.getClass().getDeclaredFields()){
             if (field.getName().equals("id")) {
                 continue;
             }
@@ -140,11 +222,31 @@ public class AbstractDAO <T>{
             fields.append(field.getName()).append(",");
             values.append("?,");
         }
-        fields.setLength(fields.length() - 1);
-        values.setLength(values.length() - 1);
+        if (!fields.isEmpty()) {
+            fields.setLength(fields.length() - 1);
+        }
+        if (!values.isEmpty()) {
+            values.setLength(values.length() - 1);
+        }
 
-        return "INSERT INTO " + object.getClass().getSimpleName() + "(" + fields + ") VALUES (" + values + ")";
+        return "INSERT INTO " + object.getClass().getSimpleName().toLowerCase() + " (" + fields + ") VALUES (" + values + ")";
     }
+
+    private String createUpdateStatement(T object) {
+        StringBuilder fields = new StringBuilder();
+        for (Field field : object.getClass().getDeclaredFields()) {
+            if (field.getName().equals("id")) {
+                continue;
+            }
+            field.setAccessible(true);
+            fields.append(field.getName()).append(" = ?,");
+        }
+        if (!fields.isEmpty()) {
+            fields.setLength(fields.length() - 1);
+        }
+        return "UPDATE " + object.getClass().getSimpleName().toLowerCase() + " SET " + fields + " WHERE id = ?";
+    }
+
 
     private List<T> createObjects(ResultSet resultSet) {
         List<T> list = new ArrayList<T>();
@@ -162,7 +264,16 @@ public class AbstractDAO <T>{
                 T instance = (T) ctor.newInstance();
                 for(Field field : type.getDeclaredFields()){
                     String fieldName = field.getName();
-                    Object value = resultSet.getObject(fieldName);
+                    Object value;
+                    if (field.getType() == int.class) {
+                        value = resultSet.getInt(fieldName);
+                    } else if (field.getType() == String.class) {
+                        value = resultSet.getString(fieldName);
+                    } else if (field.getType() == double.class) {
+                        value = resultSet.getDouble(fieldName);
+                    } else {
+                        value = resultSet.getObject(fieldName);
+                    }
                     PropertyDescriptor propertyDescriptor = new PropertyDescriptor(fieldName, type);
                     Method method = propertyDescriptor.getWriteMethod();
                     method.invoke(instance, value);
