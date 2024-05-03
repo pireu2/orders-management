@@ -11,8 +11,17 @@ import org.example.Model.Orders;
 import org.example.Model.Product;
 
 import java.util.List;
-
+/**
+ * This class provides the logic for the Order operations.
+ */
 public class OrderLogic {
+
+    /**
+     * Creates a new order.
+     *
+     * @param ordersDTO the order to create
+     * @throws IllegalArgumentException if the order cannot be created
+     */
     public static void createOrder(OrdersDTO ordersDTO) throws IllegalArgumentException{
         ClientDAO clientDAO = new ClientDAO();
         Client client = clientDAO.findByName(ordersDTO.getClientName());
@@ -43,6 +52,11 @@ public class OrderLogic {
     }
 
 
+    /**
+     * Retrieves all orders.
+     *
+     * @return a list of all orders
+     */
     public static List<OrdersDTO> getAllOrders(){
         OrdersDAO ordersDAO = new OrdersDAO();
         List<Orders> orders = ordersDAO.findAll();

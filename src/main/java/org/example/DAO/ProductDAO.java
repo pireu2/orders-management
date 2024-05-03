@@ -6,11 +6,23 @@ import org.example.Model.Product;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
+/**
+ * This class provides the DAO functionality for the Product class.
+ */
 public class ProductDAO extends AbstractDAO<Product> {
+
+    /**
+     * Constructs a new ProductDAO.
+     */
     public ProductDAO() {
         super();
     }
 
+    /**
+     * Decrements the stock of a product by a given quantity.
+     * @param product the product to decrement the stock of
+     * @param quantity the quantity to decrement the stock by
+     */
     public void decrementStock(Product product, int quantity) {
         int newStock = product.getStock() - quantity;
         Connection connection = null;

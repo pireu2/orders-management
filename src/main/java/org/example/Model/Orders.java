@@ -1,5 +1,8 @@
 package org.example.Model;
 
+/**
+ * This class represents an Order with id, client_id, product_id, and quantity.
+ */
 public class Orders {
     private int id;
     private int client_id;
@@ -8,8 +11,20 @@ public class Orders {
     private int product_id;
     private int quantity;
 
+    /**
+     * Default constructor.
+     */
     public Orders(){
     }
+
+    /**
+     * Constructor with all parameters.
+     *
+     * @param id the id of the order
+     * @param client_id the client_id of the order
+     * @param product_id the product_id of the order
+     * @param quantity the quantity of the order
+     */
     public Orders(int id, int client_id, int product_id, int quantity){
         super();
         this.id = id;
@@ -18,6 +33,13 @@ public class Orders {
         this.quantity = quantity;
     }
 
+    /**
+     * Constructor without id.
+     *
+     * @param client_id the client_id of the order
+     * @param product_id the product_id of the order
+     * @param quantity the quantity of the order
+     */
     public Orders(int client_id, int product_id, int quantity){
         super();
         this.client_id = client_id;

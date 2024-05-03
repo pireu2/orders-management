@@ -14,7 +14,16 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.List;
 
+/**
+ * This class provides the View functionality for the GUI.
+ */
 public class View  extends JFrame {
+
+    /**
+     * Constructs a new View.
+     *
+     * @param title the title of the view
+     */
     public View(String title) {
         JPanel mainPanel = new JPanel();
         this.setTitle(title);
@@ -31,6 +40,12 @@ public class View  extends JFrame {
         this.setContentPane(mainPanel);
     }
 
+
+    /**
+     * Sets the main panel of the view.
+     *
+     * @param panel the panel to set as the main panel
+     */
     public void setMainPanel(JPanel panel){
         this.setContentPane(panel);
     }
@@ -418,6 +433,9 @@ public class View  extends JFrame {
         return pane;
     }
 
+    /**
+     * Prepares the top bar of the view.
+     */
     private void prepareTopBar(){
         JMenuBar menuBar = new JMenuBar();
         JMenu clientMenu = new JMenu("Client");
@@ -525,8 +543,11 @@ public class View  extends JFrame {
         this.setJMenuBar(menuBar);
     }
 
-
-
+    /**
+     * Populates the table with the given objects.
+     *
+     * @param objects the objects to populate the table with
+     */
     private void populateTable(List<?> objects){
         if(objects.isEmpty()){
             JOptionPane.showMessageDialog(this, "No data to display");
@@ -561,7 +582,4 @@ public class View  extends JFrame {
         panel.add(new JScrollPane(new JTable(tableModel)), BorderLayout.CENTER);
         setMainPanel(panel);
     }
-
-
-
 }

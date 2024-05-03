@@ -12,16 +12,30 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+
+/**
+ * This class provides the base DAO functionality for all DAO classes.
+ *
+ * @param <T> the type parameter associated with the DAO.
+ */
 public class AbstractDAO <T>{
     protected static final Logger LOGGER = Logger.getLogger(AbstractDAO.class.getName());
     private final Class<T> type;
 
+    /**
+     * Constructs a new AbstractDAO.
+     */
     @SuppressWarnings("unchecked")
     public AbstractDAO() {
         this.type = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
 
+    /**
+     * Retrieves all records from the table associated with the DAO's type parameter.
+     *
+     * @return a list of records from the table associated with the DAO's type parameter.
+     */
     public List<T> findAll(){
         Connection connection = null;
         PreparedStatement statement = null;
@@ -42,6 +56,13 @@ public class AbstractDAO <T>{
         }
         return null;
     }
+
+    /**
+     * Retrieves a record by its name from the table associated with the DAO's type parameter.
+     *
+     * @param name the name of the record to retrieve.
+     * @return the record with the specified name.
+     */
     public T findByName(String name){
         Connection connection = null;
         PreparedStatement statement = null;
@@ -67,6 +88,12 @@ public class AbstractDAO <T>{
         }
         return null;
     }
+
+    /**
+     * Retrieves the last record inserted into the table associated with the DAO's type parameter.
+     *
+     * @return the last record inserted into the table.
+     */
     public T findLast(){
         Connection connection = null;
         PreparedStatement statement = null;
@@ -91,6 +118,13 @@ public class AbstractDAO <T>{
         }
         return null;
     }
+
+    /**
+     * Retrieves a record by its ID from the table associated with the DAO's type parameter.
+     *
+     * @param id the ID of the record to retrieve.
+     * @return the record with the specified ID.
+     */
     public T findById(int id){
         Connection connection = null;
         PreparedStatement statement = null;
@@ -116,6 +150,12 @@ public class AbstractDAO <T>{
         }
         return null;
     }
+
+    /**
+     * Inserts a new record into the table associated with the DAO's type parameter.
+     *
+     * @param object the object to insert into the table.
+     */
     public void insert(T object){
         Connection connection = null;
         PreparedStatement statement = null;
@@ -148,6 +188,13 @@ public class AbstractDAO <T>{
         }
     }
 
+
+    /**
+     * Updates a record in the table associated with the DAO's type parameter.
+     *
+     * @param object the object to update in the table.
+     * @param id the ID of the record to update.
+     */
     public void update(T object, int id){
         Connection connection = null;
         PreparedStatement statement = null;
@@ -181,7 +228,11 @@ public class AbstractDAO <T>{
         }
     }
 
-
+    /**
+     * Deletes a record from the table associated with the DAO's type parameter.
+     *
+     * @param id the ID of the record to delete.
+     */
     public void delete(int id){
         Connection connection = null;
         PreparedStatement statement = null;

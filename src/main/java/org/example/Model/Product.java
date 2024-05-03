@@ -1,13 +1,28 @@
 package org.example.Model;
 
+/**
+ * This class represents a Product with id, name, price, and stock.
+ */
 public class Product {
     private int id;
     private String name;
     private double price;
     private int stock;
 
+    /**
+     * Default constructor.
+     */
     public Product(){
     }
+
+    /**
+     * Constructor with all parameters.
+     *
+     * @param id the id of the product
+     * @param name the name of the product
+     * @param price the price of the product
+     * @param stock the stock of the product
+     */
     public Product(int id, String name, double price, int stock){
         super();
         this.id = id;
@@ -16,6 +31,13 @@ public class Product {
         this.stock = stock;
     }
 
+    /**
+     * Constructor without id.
+     *
+     * @param name the name of the product
+     * @param price the price of the product
+     * @param stock the stock of the product
+     */
     public Product(String name, double price, int stock){
         super();
         this.name = name;
