@@ -12,10 +12,17 @@ import org.postgresql.Driver;
  * This class is responsible for creating and closing database connections.
  */
 public class ConnectionFactory {
+<<<<<<< HEAD
     private static final String URL = "jdbc:postgresql://localhost:5432/orders_db";
     private static final String USER = "orders_app";
     private static final String DRIVER = "org.postgresql.Driver";
     private static final String PASSWORD = "1234";
+=======
+    private static final String URL = "jdbc:postgresql://localhost:5432/orders_app";
+    private static final String USER = "postgres";
+    private static final String DRIVER = "org.postgresql.Driver";
+    private static final String PASSWORD = "";
+>>>>>>> 37c242c (added dump)
     private static final ConnectionFactory connectionFactory = new ConnectionFactory();
 
     /**
