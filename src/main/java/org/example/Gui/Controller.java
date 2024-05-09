@@ -7,7 +7,6 @@ import org.example.DTO.ProductDTO;
 import org.example.Logic.ClientLogic;
 import org.example.Logic.OrderLogic;
 import org.example.Logic.ProductLogic;
-import org.example.Model.Log;
 import org.example.Logic.LogLogic;
 
 import java.util.List;

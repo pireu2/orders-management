@@ -7,7 +7,6 @@ import org.example.DTO.ProductDTO;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.html.StyleSheet;
 import java.awt.*;
 import java.lang.reflect.Field;
 import java.util.Arrays;
