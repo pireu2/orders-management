@@ -23,7 +23,7 @@ public class LogLogic {
         List<Log> logs = logDAO.findAll();
         List<LogDTO> logDTOS = new ArrayList<>();
         for(Log log : logs){
-            LogDTO logDTO = new LogDTO(log.getBill());
+            LogDTO logDTO = new LogDTO(log.bill());
             logDTOS.add(logDTO);
         }
         return logDTOS;
